@@ -1,10 +1,10 @@
 #+begin_export latex
+\section{Genom Besorgen}
 Wir möchten das Genom von \emph{Mycoplasmoides genitalium}
 untersuchen. Genauer gesagt, das Genom des \emph{Typstamms} von
 \emph{M. genitalium}, G37. Dazu benötigen wir die Taxon-ID von
 \emph{M. genitalium} G37. Die schauen wir mit dem Programm \ty{taxi}
-in einer \emph{remoten} Datenbank nach, \ty{-r}. Wir finden heraus,
-die Taxon-ID von \emph{M. genitalium} ist 243273.
+in einer \emph{remoten} Datenbank nach, \ty{-r}, und finden 243273.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   taxi -r "genitalium G37"
@@ -12,21 +12,21 @@ die Taxon-ID von \emph{M. genitalium} ist 243273.
 #+begin_export latex
 \begin{verbatim}
 # ID      Parent  Name
-  243273  2097    Mycoplasmoides genitalium G37
+    243273  2097    Mycoplasmoides genitalium G37
 \end{verbatim}
 #+end_export
 #+begin_export latex
 Genome werden durch \emph{Accessions} identifiziert. Mit Hilfe der
 Taxon-ID können wir die Accessions der Genome von \emph{M. genitalium}
 G37 nachsehen. Dazu verwenden wir das Programm \ty{neighbors}, dem wir
-wieder \emph{remote} (\ty{-r}) als \emph{target} die Taxon-ID geben
-(\ty{-t}) und nur die Genome dieser Targets anfordern (\emph{only},
-\ty{-o}). Die Genome sollen Qualitäts-\emph{Level} (\ty{-L})
-\emph{complete} sein. Wir bekommen ein Genome angeboten,
-GCF\_000027325.1.
+als \emph{target} die Taxon-ID geben (\ty{-t}) und nur die Genome
+dieser Targets anfordern (\emph{only}, \ty{-o}). Die Genome sollen
+Qualitäts-\emph{Level} (\ty{-L}) \emph{complete} sein, und wir schauen
+sie wieder in einer \emph{remoten} Datenbank nach (\ty{-r}). Wir
+bekommen ein Genome angeboten, GCF\_000027325.1.
 #+end_export
 #+begin_src bash <<gene.sh>>=
-  neighbors -r -t 243273 -o -L complete
+  neighbors -t 243273 -o -L complete -r
 #+end_src
 #+begin_export latex
 \small
@@ -39,22 +39,22 @@ t       243273    Mycoplasmoides genitalium G37  GCF_000027325.1
 \normalsize
 
 Wir laden das eben gefundene Genom vom Netz mit dem Programm
-\ty{datasets}, zusammen mit den Gen-Annotationen im sogenannten
-GFF3-Format.
+\ty{datasets}, zusammen mit seinen Annotationen im sogenannten
+GFF3-Format. Zu den Annotationen gehören insbesondere die Gene.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   datasets download genome accession GCF_000027325.1 \
   	 --include genome,gff3
 #+end_src
 #+begin_export latex
-Wir haben jetzt die gezippte, also komprimierte Datei
+Wir haben jetzt die gezippte, also komprimierte, Datei
 \ty{ncbi\_dataset.zip} heruntergeladen.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   ls
 #+end_src
 #+begin_export latex
-Wir entzippen die Datei.
+Wir entzippen \ty{ncbi\_dataset.zip}.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   unzip ncbi_dataset.zip
@@ -62,29 +62,28 @@ Wir entzippen die Datei.
 #+begin_export latex
 Die neuen Daten liegen jetzt in einem Unter-Unterverzeichnis von
 \ty{ncbi\_dataset}. Um die Eingabe langer Verzeichnisnamen zu
-vereinfachen, kann man die Selbst-Vervollständigung verwenden: Man
-tippt die ersten paar Buchstaben eines Namens, gefolgt von
-\ty{Tab}. Wenn der Rest des Namens eindeutig ist, wird er
-hingeschrieben. Wenn nicht, bekommt man beim zweiten \ty{Tab} die
-Möglichkeiten angezeigt.
+vereinfachen, kann man die Selbst-Ver\-voll\-stän\-di\-gung der Unix
+Befehlszeile verwenden: Man tippt die ersten paar Buchstaben eines
+Namens, gefolgt von \ty{Tab}. Wenn der Rest des Namens eindeutig ist,
+wird er vervollständigt. Wenn nicht, bekommt man beim zweiten \ty{Tab}
+die Möglichkeiten angezeigt.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   ls ncbi_dataset/data/GCF_000027325.1/
 #+end_src
 #+begin_export latex
 Um uns die Arbeit zu erleichtern, kopieren wir die beiden Dateien zu
-enfacheren Namen mit dem Befehl \ty{cp} für \emph{copy}. Zuerst das
-Genom zu \ty{genom.fna}. Das Anhängsel \ty{fna} bedeutet Nukleotide im
-FASTA Format. Das FASTA Format ist ein weitverbreitetes Format für
-Sequenzen. Wir werden es gleich noch sehen.  \tiny
+Dateien mit einfacheren Namen mit dem Befehl \ty{cp} für
+\emph{copy}. Zuerst das Genom zu \ty{genom.fna}. Das Anhängsel
+\ty{fna} bedeutet Nukleotide im FASTA Format. Das FASTA Format ist ein
+weitverbreitetes Format für Sequenzen. Wir werden es gleich noch
+sehen.
 #+end_export
 #+begin_src bash <<gene.sh>>=
-  cp ncbi_dataset/data/GCF_000027325.1/GCF_000027325.1_ASM2732v1_genomic.fna genom.fna
+  cp ncbi_dataset/data/GCF_000027325.1/G*.fna genom.fna
 #+end_src
 #+begin_export latex
-\normalsize
 Dann die Annotationen zu \ty{annotation.gff}.
-\tiny
 #+end_export
 #+begin_src bash <<gene.sh>>=
   cp ncbi_dataset/data/GCF_000027325.1/genomic.gff annotation.gff
@@ -96,7 +95,8 @@ nützlich, wenn wir einen alten Befehl leicht wiederholen könnten. Mit
 den Pfeiltasten $\uparrow$ und $\downarrow$ könnten wir in der Liste
 vergangener Befehle rauf und runter laufen.
 
-Als nächstes schauen wir uns den Kopf, \emph{head}, der Genomdatei
+\section{Die Genomdatei}
+Als nächstes schauen wir uns den Kopf, \emph{head}, der Genomsequenz
 an. Wir sehen das FASTA Format, das besteht aus einer Kopfzeile, die
 mit \verb+>+ anfängt, und einer oder mehreren Zeilen mit Sequenzdaten.
 #+end_export
@@ -106,7 +106,7 @@ mit \verb+>+ anfängt, und einer oder mehreren Zeilen mit Sequenzdaten.
 #+begin_export latex
 \begin{verbatim}
 >NC_000908.2 Mycoplasmoides genitalium G37, complete sequence
-TAAGTTATTATTTAGTTAATACTTTTAACAATATTATTAAGGTATTTAAAAAATACTATTATAGTATTTAACATAGTTAA
+TAAGTTATTATTTAGTTAATACTTTTAACAATATTATTAAGGTATTTAAA...
 ...
 \end{verbatim}
 #+end_export
@@ -120,10 +120,14 @@ Schwanz, ansehen.
 #+begin_export latex
 \begin{verbatim}
 ...
-TCAAGAATGACTTTTCGCCTTTCTGGACAAAGTTTAACCAATGATCCTGCAACATTAGTTGCCATTGTAGTTTTTAATAC
-GCCGCCTTTATTATTTACAAAAGAAATGATCATATATTTAAATGATTATAATATTTCTTTAATACTAAAAAAATAC
+TCAAGAATGACTTTTCGCCTTTCTGGACAAAGTTTAACCAATGATCCTGC...
+GCCGCCTTTATTATTTACAAAAGAAATGATCATATATTTAAATGATTATA...
 \end{verbatim}
-Wir zählen die 580,076 Nukleotide im Genom von \emph{M. genitalium}.
+Wir zählen die 580,076 Nukleotide im Genom von
+\emph{M. genitalium}. Dabei sehen wir auch, dass etwa ein Drittel
+seiner Basen jeweils \ty{A} und \ty{T} sind. Das ist deutlich mehr als
+dads Viertel, das wir bei Gleichverteilung der vier Basen erwarten
+würden. Wir sagen, das Genom von \emph{M. genitalium} ist A/T-reich.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   cres genom.fna
@@ -139,34 +143,36 @@ T       195711 0.337
 \end{verbatim}
 #+end_export
 #+begin_export latex
+\section{Die Annotationsdatei}
 Wir schauen uns den Kopf der Annotationsdatei an, aber diesmal lassen
-wir uns die ersten 20 Zeilen anzeigen (\ty{-n}). Nach den
-Kommentar-Zeilen mit Hash-Tag sehen wir eine Tabelle.
+wir uns die ersten 20 Zeilen anzeigen (\ty{-n}) anstatt der ersten 10,
+die \ty{head} sonst anzeigt. Nach den Kommentar-Zeilen mit Hash-Tag
+sehen wir eine Tabelle.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   head -n 20 annotation.gff
 #+end_src
 #+begin_export latex
-Wir möchten nun die Kommenatre wegschneiden. Dazu verwenden wir das
+Wir möchten nun die Kommentare wegschneiden. Dazu verwenden wir das
 Programm \ty{grep}, mit dem die Zeilen ausgegeben werden, die mit
-einem Muster übereinstimmen. Unser Muster ist ein Hastag in der ersten
-Position der Zeile.
+einem Muster übereinstimmen. Unser Muster ist ein Hashtag in der
+ersten Position der Zeile.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   grep '^#' annotation.gff
 #+end_src
 #+begin_export latex
-Aber wir wollten doch die Kommentare weglassen! Kein Problem, wir
-könne mit \ty{-v} die Suche invertieren, also die Zeilen ausgeben, die
-nicht übereinstimmen.
+Aber wir wollten doch die Kommentare \emph{weglassen}---jetzt haben
+wir nur die Kommentare! Kein Problem, wir könne mit \ty{-v} die Suche
+invertieren, also die Zeilen ausgeben, die nicht mit Hashtag anfangen.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   grep -v '^#' annotation.gff
 #+end_src
 #+begin_export latex
-Die Tabelle bestehe aus neun Spalten, von denen die letzte aus viel
-Text besteht. Also schneiden wir vom Ergebnis unseres \ty{grep}
-Befehls die ersten 8 Spalten rauss (\ty{cut}), und bekommen eine
+Die Tabelle hat neun Spalten, von denen die letzte aus viel Text
+besteht. Also schneiden wir vom Ergebnis unseres \ty{grep} Befehls die
+ersten 8 Spalten raus (\ty{cut}), und bekommen so eine
 übersichtlichere Tabelle.
 #+end_export
 #+begin_src bash <<gene.sh>>=
@@ -177,17 +183,21 @@ Befehls die ersten 8 Spalten rauss (\ty{cut}), und bekommen eine
 \begin{verbatim}
 NC_000908.2	RefSeq	region	1	580076	.	+	.
 NC_000908.2	RefSeq	gene	686	1828	.	+	.
-NC_000908.2	Protein Homology	CDS	686	1828	.	+	0
+NC_000908.2	Protein Homology	CDS	686	1828...
 ...
 \end{verbatim}
 
-Wir können also zwei Befehle mit einem senkrechten Strich verknüpfen.
+Wir haben eben die beiden Befehle \ty{grep} und \ty{cut} mit einem
+senkrechten Strich verknüpft. Das können wir auf der Unix Befehlszeile
+mit beliebigen Befehlen machen. Wenn wir allgemein schreiben
 \begin{verbatim}
-  befehl1 | befehl2
+befehl1 | befehl2
 \end{verbatim}
-Das bedeutet, die Ausgabe von \ty{befehl1} wird Eingabe von
-\ty{befehl2}. Man spricht von einer ``Pipeline''. Wir können eine
-Pipeline beliebig verlängern.
+wird die Ausgabe von \ty{befehl1} die Eingabe von \ty{befehl2}. Man
+spricht von einer ``Pipeline''. Wie eine echte Gas- oder Ölpipeline,
+können wir eine Befehls\-pipeline beliebig verlängern. Zum Beispiel
+können wir die Ausgabe des letzten Befehls mit \ty{head} auf seine
+zehn Kopfzeilen reduzieren.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   grep -v '^#' annotation.gff |
@@ -195,12 +205,12 @@ Pipeline beliebig verlängern.
       head
 #+end_src
 #+begin_export latex
-In der dritten Spalte unserer Tabelle, dort wo \ty{region}, \ty{gene}
-und \ty{CDS} steht, zeigt den Typ der Annotation. CDS steht hier für
-\emph{coding sequence}. Wir schneiden die Annotationen raus, sortieren
-sie (\ty{sort}), und zählen (\emph{count}, \ty{-c}) die verschiedenen
-(\ty{unique}) Werte. Erkennst du eine order mehrere der Annotationen
-wieder?
+Die dritte Spalte unserer Tabelle zeigt den Typ der Annotation, wir
+sehen \ty{region}, \ty{gene} und \ty{CDS}. CDS steht für \emph{coding
+sequence}, also eine Sequenz, die ein Protein codiert. Wir schneiden
+die Annotationen raus, sortieren sie (\ty{sort}), und zählen
+(\emph{count}, \ty{-c}) die verschiedenen (\ty{unique})
+Annotationen. Erkennst du eine order mehrere der Annotationen wieder?
 #+end_export
 #+begin_src bash <<gene.sh>>=
   grep -v '^#' annotation.gff |
@@ -223,21 +233,23 @@ wieder?
 \end{verbatim}
 #+end_export
 #+begin_export latex
-Wir konzentrieren uns auf die Zeilen, die Gene oder Pseudogene beschreiben.
+\section{Gene}
+Wir konzentrieren uns auf die Gene von \emph{M. genitalium}. Dabei
+achten wir darauf, die Pseudogene---kaputte Gene---wegzulassen.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   cut -f 1-8 annotation.gff |
-      grep gene
+      grep gene |
+      grep -v pseudogene
 #+end_src
 #+begin_export latex
 \begin{verbatim}
 NC_000908.2	RefSeq	gene	686	1828	.	+	.
 ...
 \end{verbatim}
-Wir vergewissern uns, dass wir $546+20=566$ Gene und Pseudogene haben,
-indem wir die Zeilen (\emph{lines}, \ty{-l}) in unserer Ausgabe mit
-dem Programm \ty{wc} zählen. Der Name \ty{wc} steht für \emph{word
-counter}.
+Wir vergewissern uns, dass wir 546 Gene haben, indem wir die Zeilen
+(\emph{lines}, \ty{-l}) in unserer Ausgabe mit dem Programm \ty{wc}
+zählen. Der Name \ty{wc} steht für \emph{word counter}.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   cut -f 1-8 annotation.gff |
@@ -252,8 +264,8 @@ Tabelle:
 \item Spalte 5: End Position
 \item Spalte 7: Strang der DNA-Doppelhelix, \ty{+} oder \ty{-}
 \end{itemize}
-Die schneiden wir aus und lenken das Ergebnis mit \verb+>+ in die
-Datei \ty{gene.txt}.
+Wir schneiden die drei wichtigen Spalten aus und lenken das Ergebnis
+mit \verb+>+ in die Datei \ty{gene.txt}.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   cut -f 1-8 annotation.gff |
@@ -261,7 +273,7 @@ Datei \ty{gene.txt}.
       cut -f 4,5,7 > gene.txt
 #+end_src
 #+begin_export latex
-Wir schauen uns den Kopf unserer neuen Datei \ty{gene.txt} an.
+Wir schauen uns den Kopf von \ty{gene.txt} an.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   head gene.txt
@@ -273,21 +285,21 @@ Wir schauen uns den Kopf unserer neuen Datei \ty{gene.txt} an.
 2845	4797	+
 ...
 \end{verbatim}
-Wir schneiden das erste Gen in unserer Liste aus der Genomsequenz. Was
-sind die ersten drei Basen des Gens? Weiß jemand vielleicht, für
-welche Aminosäure die codieren?
+Wir schneiden das erste Gen, also die Basen 686--1828 aus der
+Genomsequenz. Was sind die ersten drei Basen des Gens? Weiß jemand
+vielleicht, für welche Aminosäure die codieren?
 #+end_export
 #+begin_src bash <<gene.sh>>=
   cutSeq -r 686-1828 genom.fna
 #+end_src
 #+begin_export latex
 \begin{verbatim}
->NC_000908.2 Mycoplasmoides genitalium G37, complete sequence 686..1828
-ATGAAAATATTAATTAATAAAAGTGAATTGAATAAAATTTTGAAAAAAATGAATAACGTTATTATTTCCA
+>NC_000908.2 Mycoplasmoides genitalium G37, complete sequence...
+ATGAAAATATTAATTAATAAAAGTGAATTGAATAAAATTTTGAAAAAAAT...
 ...
 \end{verbatim}
 Wir translatieren unser Gen und finden, dass seine erste Aminosäure
-\ty{M} is, methionin, mit der Proteine normalerweise anfangen. Weiß
+\ty{M} is, Methionin, mit der Proteine normalerweise anfangen. Weiß
 jemand, was die letzte Aminosäure in unserer Translation ist?
 #+end_export
 #+begin_src bash <<gene.sh>>=
@@ -297,13 +309,15 @@ jemand, was die letzte Aminosäure in unserer Translation ist?
 #+begin_export latex
 \begin{verbatim}
 >NC_000908.2 Mycoplasmoides genitalium G37... - translated
-MKILINKSELNKILKKMNNVIISNNKIKPHHSYFLIEAKEKEINFYANNEYFSVKCNLNKNIDILEQGSL
+MKILINKSELNKILKKMNNVIISNNKIKPHHSYFLIEAKEKEINFYANNE...
 ...
 INFDFQGNSKYFLITSKSEPELKQILVPSR*
 \end{verbatim}
 Jetzt untersuchen wir die Längen der Gene von
-\emph{M. genitalium}. Dazu schreiben wir ein kleines Programm in Awk,
-mit dem wir die Länge eines jeden Gens ausrechnen und drucken.
+\emph{M. genitalium}. Dazu schreiben wir ein kleines Programm in der
+Programmiersprache Awk. Awk geht zeilenweise vor, und in jeder Zeile
+der Eingabe heißt der erste Wert \verb+$1+, der zweite \verb+$2+, und
+so weiter. So können wir die Länge jedes Gens ausrechnen und drucken.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   awk '{l=$2-$1+1; print l}' gene.txt |
@@ -319,8 +333,8 @@ mit dem wir die Länge eines jeden Gens ausrechnen und drucken.
 #+end_export
 #+begin_export latex
 Indem wir die Genlängen nummerisch (\ty{-n}) sortieren, finden wir das
-kürzeste. Es besteht nur aus 74 Aminosäuren. Aber es ist nicht
-alleine, fünf Gene bestehen nur aus 74 Aminosäuren
+kürzeste. Es besteht nur aus 74 Basen. Aber es ist nicht alleine, vier
+weitere Gene bestehen ebenfalls aus nur 74 Basen.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   awk '{l=$2-$1+1; print l}' gene.txt |
@@ -337,8 +351,8 @@ alleine, fünf Gene bestehen nur aus 74 Aminosäuren
 75
 ...
 \end{verbatim}
-Das längste Gen is über 70-mal länger und besteht aus 5.418
-Aminosäuren.
+Das längste Gen is über 70-mal länger als die kürzesten und besteht
+aus 5.418 Basen.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   awk '{l=$2-$1+1; print l}' gene.txt |
@@ -364,25 +378,27 @@ stdin  989.15 644071 802.54 566
 \end{verbatim}
 #+end_export
 #+begin_export latex
-Wir können auch die Verteilung der Genlängen als Histogramm in
-Abbildung~\ref{fig:hist} plotten. Dort sehen wir, dass die Verteilung
-der Genlängen durch extrem lange Gene geprägt ist.
+Wir können auch die Verteilung der Genlängen in Basenpaaren
+(\emph{base pairs}, bp) als Histogramm in Abbildung~\ref{fig:hist}
+plotten. Dort sehen wir, dass die Verteilung der Genlängen durch
+extrem lange Gene geprägt ist.
 \begin{figure}
   \begin{center}
     \includegraphics{../gene/hist}
-  \end{center};
+  \end{center}
   \caption{Die Verteilung von Genlängen im Genom von \emph{M. genitalium}.}\label{fig:hist}
 \end{figure}
 #+end_export
 #+begin_src bash <<gene.sh>>=
   awk '{l=$2-$1+1; print l}' gene.txt |
       histogram |
-      plotLine -x "Länge" -y "Anzahl"
+      plotLine -x "Laenge (bp)" -y "Anzahl"
 #+end_src
 #+begin_export latex
-Bisher sind unsere Gene Intervalle auf dem plus oder minus Strang der
-DNA. Jetzt wollen wir diese Intervalle sichtbar machen. Wir fangen mit
-dem ersten Gen in \ty{gene.txt} an.
+\section{Gene darstellen}
+Bisher sind unsere Gene nur Intervalle auf dem plus oder minus Strang
+der DNA. Jetzt wollen wir diese Intervalle sichtbar machen. Wir fangen
+mit dem ersten Gen in \ty{gene.txt} an.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   head -n 1 gene.txt
@@ -391,36 +407,37 @@ dem ersten Gen in \ty{gene.txt} an.
 \begin{verbatim}
 686	1828	+
 \end{verbatim}
-Wir verwenden das Programm \ty{drawGenes.awk}, um solche Koordinaten
-in Rechtecke zu verwandeln. Der Suffix \ty{awk} im Namen von
-\ty{drawGenes.awk} bedeutet, dass es ein Programm in der
-Programmiersprache Awk ist. Wir schauen uns den Code an, nur um
-festzustellen, dass er lesbarer Text ist.
+Wir verwenden das Programm \ty{malGene.awk}, um solche Koordinaten als
+Rechtecke zu malen. Der Suffix \ty{awk} im Namen von \ty{malGene.awk}
+bedeutet, dass es ein Programm in der Programmiersprache Awk ist. Wir
+schauen uns den Code an, nur um festzustellen, dass er lesbarer Text
+ist---wie unsere kleineren Awk Programme bisher.
 #+end_export
 #+begin_src bash <<gene.sh>>=
-  cat drawGenes.awk
+  cat malGene.awk
 #+end_src
 #+begin_export latex
 \begin{verbatim}
 {
-  start = $1
-  end = $2
-  strand = $3
+    start = $1
+    ende = $2
+    strang = $3
 ...
 }
 END {
-  printf "1\t0\n"
+    printf "1\t0\n"
 }
 \end{verbatim}
 #+end_export
 #+begin_export latex
-Wir verwenden \ty{drawGenes.awk}, um unser erstes Gen in ein Rechteck
-zu verwandeln. Dieses besteht aus vier x/y Koordinaten. Die letzte
-Position, $(1,0)$, ist unser Ausgangspunkt.
+Wir verwenden \ty{malGene.awk}, um unser erstes Gen als Rechteck zu
+malen. Dieses besteht aus vier x/y Koordinaten, die vier Ecken eines
+Rechtecks. Die fünfte und letzte Position, $(1,0)$, ist unser
+Ausgangspunkt.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   head -n 1 gene.txt |
-      awk -f drawGenes.awk
+      awk -f malGene.awk
 #+end_src
 #+begin_export latex
 \begin{verbatim}
@@ -438,8 +455,8 @@ Abbildung~\ref{fig:gene}A.
   \begin{center}
   \begin{tabular}{cc}
   \textbf{A} & \textbf{B}\\
-  \includegraphics{../gene/gene1} &
-  \includegraphics{../gene/gene2}
+  \scalebox{0.7}{\includegraphics{../gene/gene1}} &
+  \scalebox{0.7}{\includegraphics{../gene/gene2}}
   \end{tabular}
   \end{center}
   \caption{Erster Versuch, ein Gen zu plotten (\textbf{A}), und zweiter Versuch (\textbf{B}).}\label{fig:gene}
@@ -447,36 +464,33 @@ Abbildung~\ref{fig:gene}A.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   head -n 1 gene.txt |
-      awk -f drawGenes.awk |
+      awk -f malGene.awk |
       plotLine
 #+end_src
 #+begin_export latex
 Abbildung~\ref{fig:gene}A ist noch nicht besonders schön. Um sie zu
-verbessern, lassen wir die Beschriftung der Y-Achse weg und
-verlängern die Y-Achse. Da Gene auf dem negativ-Strang nach unten
-gezeichnet werden, machen wir die Y-Achse auch nach oben und unten
+verbessern, lassen wir die Beschriftung der Y-Achse weg und verlängern
+die Y-Achse. Da Gene auf dem negativ-Strang nach unten gezeichnet
+werden, machen wir die Y-Achse zusätzlich nach oben und unten
 symmetrisch. Zuletzt beschriften wir die x-Achse und erhalten
 Abbildung~\ref{fig:gene}B.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   head -n 1 gene.txt |
-      awk -f drawGenes.awk |
-      plotLine -u y -Y "-5:5" -x "Position"
+      awk -f malGene.awk |
+      plotLine -u y -Y "-5:5" -x "Position (bp)"
 #+end_src
 #+begin_export latex
 Jetzt plotten wir alle Gene.
 #+end_export
 #+begin_src bash <<gene.sh>>=
-  awk -f drawGenes.awk gene.txt |
+  awk -f malGene.awk gene.txt |
       plotLine -u y -Y "-5:5" -x "Position"
 #+end_src
 #+begin_export latex
-Wir merken, die Position ist noch etwas ungeschickt, wir würden sie
-gerne von einzelnen Basen in Kilobasen umwandeln. Das können wir auch
-mit der Programmiersprache mit der Programmiersprache Awk, die
-Zeilenweise vorgeht. In jeder Zeile wird der erste Wert mit \verb+$1+
-angesprochen, der zweite Wert mit \verb+$2+, und so weiter. Also
-können wir die Positionen von Basen zu Kilobasen umwandeln.
+Die Position in einzelnen Basen zu messen führt zu schwer lesbaren
+Zahlen entlang der x-Achse.  Wir würden sie statt dessen gerne in
+Kilobasen messen. Das machen wir auch mit Awk.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   awk '{print $1/1000, $2/1000, $3}' gene.txt |
@@ -496,8 +510,8 @@ können wir die Positionen von Basen zu Kilobasen umwandeln.
 12.068 12.724 +
 \end{verbatim}
 
-Wir verwandeln die Koordinaten der Gene in Kästchen und plotten sie,
-um Abbildung~\ref{fig:genome} zu bekommen.
+Wir malen die Koordinaten der Gene als Kästchen und plotten sie, um
+Abbildung~\ref{fig:genome} zu bekommen.
 \begin{figure}
   \begin{center}
     \includegraphics{../gene/genome}
@@ -507,7 +521,7 @@ um Abbildung~\ref{fig:genome} zu bekommen.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   awk '{print $1/1000, $2/1000, $3}' gene.txt |
-      awk -f drawGenes.awk |
+      awk -f malGene.awk |
       plotLine -u y -Y "-5:5" -x "Position (kb)"
 #+end_src
 #+begin_export latex
@@ -517,12 +531,12 @@ Datei im ``encapsulated Postscript'' Format ist.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   awk '{print $1/1000, $2/1000, $3}' gene.txt |
-      awk -f drawGenes.awk |
+      awk -f malGene.awk |
       plotLine -u y -Y "-5:5" -x "Position (kb)" -p genomPlot.eps
 #+end_src
 #+begin_export latex
 Wir können unsere neue Postscript Datei mit dem Programm \ty{gv} für
-\emph{ghost viewer} anschauen. Das kaufmännische \emph{und}, \verb+&+
+\emph{ghost viewer} anschauen. Das \emph{kaufmännische und}, \verb+&+,
 am Ende des Befehls öffnet ein unabhängiges Fenster für die Graphik.
 #+end_export
 #+begin_src bash <<gene.sh>>=
@@ -530,12 +544,12 @@ am Ende des Befehls öffnet ein unabhängiges Fenster für die Graphik.
 #+end_src
 #+begin_export latex
 Eine Postscript Datei lässt sich auch gut in eine Textdatei
-einbinden. Wir verwenden dazu die Datei \ty{mg.tex}. Der Suffix
+einbinden. Wir verwenden dazu die Datei \ty{text.tex}. Der Suffix
 \ty{tex} zeit an, dass es sich dabei um eine Datei für das
 Setzprogramm \LaTeX{} handelt. Wir schauen uns die Datei an.
 #+end_export
 #+begin_src bash <<gene.sh>>=
-  cat mg.tex
+  cat text.tex
 #+end_src
 #+begin_export latex
 \begin{verbatim}
@@ -557,16 +571,16 @@ Setzprogramm \LaTeX{} handelt. Wir schauen uns die Datei an.
 Wir setzen die Datei als PDF.
 #+end_export
 #+begin_src bash <<gene.sh>>=
-  pdflatex mg
+  pdflatex text
 #+end_src
 #+begin_export latex
-Wir schauen das PDF an.
+Wir schauen das neue PDF an.
 #+end_export
 #+begin_src bash <<gene.sh>>=
-  evince mg.pdf &
+  evince text.pdf &
 #+end_src
 #+begin_export latex
-Wer mag, kann weiter mit \ty{mg.tex} spielen, den Text verändern, neu
+Wer mag, kann weiter mit \ty{text.tex} spielen, den Text verändern, neu
 setzen, und so weiter. \LaTeX{} ist von seinem Erfinder Leslie Lamport
 schön beschrieben~\cite{lam94:lat}.
 #+end_export

@@ -8,18 +8,23 @@ dok/gemi.log
 dok/gemi.out
 dok/gemi.pdf
 dok/gemi.toc
+dok/gene.tex
+dok/unix.tex
 dok/version.txt
 
+gene/Makefile
+gene/README.md
 gene/annotation.gff
 gene/gene.txt
 gene/genom.fna
 gene/genomPlot-eps-converted-to.pdf
+gene/genomPlot.eps
 gene/hist.ps
-gene/Makefile
 gene/malGene.awk
 gene/md5sum.txt
 gene/ncbi_dataset*
-gene/README.md
 gene/text.aux
 gene/text.log
 gene/text.pdf
+
+spielplatz

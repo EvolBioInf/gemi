@@ -1,8 +1,8 @@
 # Construct bin if necessary
 test -d ~/bin || mkdir ~/bin
-# Install zip and latex
+# Install gv, zip, and latex
 sudo apt update
-sudo apt install -y zip texlive
+sudo apt install -y gv texlive zip
 # Install Neighbors
 git clone https://github.com/evolbioinf/neighbors
 cd neighbors

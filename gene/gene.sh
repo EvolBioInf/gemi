@@ -1,11 +1,11 @@
 taxi -r "genitalium G37"
-neighbors -r -t 243273 -o -L complete
+neighbors -t 243273 -o -L complete -r
 datasets download genome accession GCF_000027325.1 \
          --include genome,gff3
 ls
 unzip ncbi_dataset.zip
 ls ncbi_dataset/data/GCF_000027325.1/
-cp ncbi_dataset/data/GCF_000027325.1/GCF_000027325.1_ASM2732v1_genomic.fna genom.fna
+cp ncbi_dataset/data/GCF_000027325.1/G*.fna genom.fna
 cp ncbi_dataset/data/GCF_000027325.1/genomic.gff annotation.gff
 head genom.fna
 tail genom.fna
@@ -23,7 +23,8 @@ grep -v '^#' annotation.gff |
     sort |
     uniq -c
 cut -f 1-8 annotation.gff |
-    grep gene
+    grep gene |
+    grep -v pseudogene
 cut -f 1-8 annotation.gff |
     grep gene |
     wc -l 
@@ -46,28 +47,28 @@ awk '{l=$2-$1+1; print l}' gene.txt |
     var
 awk '{l=$2-$1+1; print l}' gene.txt |
     histogram |
-    plotLine -x "Länge" -y "Anzahl"
+    plotLine -x "Laenge (bp)" -y "Anzahl"
 head -n 1 gene.txt
-cat drawGenes.awk
+cat malGene.awk
 head -n 1 gene.txt |
-    awk -f drawGenes.awk
+    awk -f malGene.awk
 head -n 1 gene.txt |
-    awk -f drawGenes.awk |
+    awk -f malGene.awk |
     plotLine
 head -n 1 gene.txt |
-    awk -f drawGenes.awk |
-    plotLine -u y -Y "-5:5" -x "Position"
-awk -f drawGenes.awk gene.txt |
+    awk -f malGene.awk |
+    plotLine -u y -Y "-5:5" -x "Position (bp)"
+awk -f malGene.awk gene.txt |
     plotLine -u y -Y "-5:5" -x "Position"
 awk '{print $1/1000, $2/1000, $3}' gene.txt |
     head
 awk '{print $1/1000, $2/1000, $3}' gene.txt |
-    awk -f drawGenes.awk |
+    awk -f malGene.awk |
     plotLine -u y -Y "-5:5" -x "Position (kb)"
 awk '{print $1/1000, $2/1000, $3}' gene.txt |
-    awk -f drawGenes.awk |
+    awk -f malGene.awk |
     plotLine -u y -Y "-5:5" -x "Position (kb)" -p genomPlot.eps
 gv genomPlot.eps &
-cat mg.tex
-pdflatex mg
-evince mg.pdf &
+cat text.tex
+pdflatex text
+evince text.pdf &

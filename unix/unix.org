@@ -1,6 +1,6 @@
 #+begin_export latex
 Zu Beginn laden wir laden wir das Repo \ty{gemi} für \emph{Genomik zum
-Mitmachen} herunter.
+Mitmachen}.
 #+end_export
 #+begin_src bash <<unix.sh>>=
   git clone https://github.com/evolbioinf/gemi
