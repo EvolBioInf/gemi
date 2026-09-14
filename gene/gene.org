@@ -1,5 +1,5 @@
 #+begin_export latex
-\section{Genom Besorgen}
+\section{Genom Runterladen}
 Wir möchten das Genom von \emph{Mycoplasmoides genitalium}
 untersuchen. Genauer gesagt, das Genom des \emph{Typstamms} von
 \emph{M. genitalium}, G37. Dazu benötigen wir die Taxon-ID von
@@ -210,7 +210,9 @@ sehen \ty{region}, \ty{gene} und \ty{CDS}. CDS steht für \emph{coding
 sequence}, also eine Sequenz, die ein Protein codiert. Wir schneiden
 die Annotationen raus, sortieren sie (\ty{sort}), und zählen
 (\emph{count}, \ty{-c}) die verschiedenen (\ty{unique})
-Annotationen. Erkennst du eine order mehrere der Annotationen wieder?
+Annotationen. Wir sehen, es gibt 546 Gene, von dnen 524 Proteine
+codieren. Es gibt auch 20 Pseudogene, das sing Gene, die nicht mehr
+funktionieren---kaputte Gene.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   grep -v '^#' annotation.gff |
@@ -233,9 +235,11 @@ Annotationen. Erkennst du eine order mehrere der Annotationen wieder?
 \end{verbatim}
 #+end_export
 #+begin_export latex
-\section{Gene}
-Wir konzentrieren uns auf die Gene von \emph{M. genitalium}. Dabei
-achten wir darauf, die Pseudogene---kaputte Gene---wegzulassen.
+\section{Gene untersuchen}
+Wir nehmen die Gene von \emph{M. genitalium} aus der Annotationsdatei,
+indem wir mit \ty{grep} nach \emph{gene} suchen. Da \emph{pseudogene}
+ebenfalls ein Treffer für \emph{gene} ist, entfernen wir im nächsten
+Schritt die Pseudogene wieder.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   cut -f 1-8 annotation.gff |
@@ -247,9 +251,10 @@ achten wir darauf, die Pseudogene---kaputte Gene---wegzulassen.
 NC_000908.2	RefSeq	gene	686	1828	.	+	.
 ...
 \end{verbatim}
-Wir vergewissern uns, dass wir 546 Gene haben, indem wir die Zeilen
-(\emph{lines}, \ty{-l}) in unserer Ausgabe mit dem Programm \ty{wc}
-zählen. Der Name \ty{wc} steht für \emph{word counter}.
+Wir vergewissern uns, dass wir die eben schon gezählten 546 Gene
+haben, indem wir die Zeilen (\emph{lines}, \ty{-l}) in unserer Ausgabe
+mit dem Programm \ty{wc} zählen. Der Name \ty{wc} steht für \emph{word
+counter}.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   cut -f 1-8 annotation.gff |
@@ -285,7 +290,7 @@ Wir schauen uns den Kopf von \ty{gene.txt} an.
 2845	4797	+
 ...
 \end{verbatim}
-Wir schneiden das erste Gen, also die Basen 686--1828 aus der
+Wir schneiden das erste Gen, also die Basen 686--1828, aus der
 Genomsequenz. Was sind die ersten drei Basen des Gens? Weiß jemand
 vielleicht, für welche Aminosäure die codieren?
 #+end_export
@@ -299,7 +304,7 @@ ATGAAAATATTAATTAATAAAAGTGAATTGAATAAAATTTTGAAAAAAAT...
 ...
 \end{verbatim}
 Wir translatieren unser Gen und finden, dass seine erste Aminosäure
-\ty{M} is, Methionin, mit der Proteine normalerweise anfangen. Weiß
+\ty{M} ist, Methionin, mit der Proteine normalerweise anfangen. Weiß
 jemand, was die letzte Aminosäure in unserer Translation ist?
 #+end_export
 #+begin_src bash <<gene.sh>>=
@@ -317,7 +322,9 @@ Jetzt untersuchen wir die Längen der Gene von
 \emph{M. genitalium}. Dazu schreiben wir ein kleines Programm in der
 Programmiersprache Awk. Awk geht zeilenweise vor, und in jeder Zeile
 der Eingabe heißt der erste Wert \verb+$1+, der zweite \verb+$2+, und
-so weiter. So können wir die Länge jedes Gens ausrechnen und drucken.
+so weiter. Bei uns ist der erste Wert die Anfangsposition des Gens,
+der zweite Wert die Endposition. So können wir die Länge jedes Gens
+ausrechnen und drucken.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   awk '{l=$2-$1+1; print l}' gene.txt |
@@ -365,7 +372,7 @@ aus 5.418 Basen.
 ...
 5418
 \end{verbatim}
-Die mittlere Länge eines Gens ist 989.15 Basen, also etwa eine Kilobase.
+Die mittlere Länge eines Gens ist 989,15 Basen, also etwa eine Kilobase.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   awk '{l=$2-$1+1; print l}' gene.txt |
@@ -398,7 +405,7 @@ extrem lange Gene geprägt ist.
 \section{Gene darstellen}
 Bisher sind unsere Gene nur Intervalle auf dem plus oder minus Strang
 der DNA. Jetzt wollen wir diese Intervalle sichtbar machen. Wir fangen
-mit dem ersten Gen in \ty{gene.txt} an.
+mit dem ersten Gen in \ty{gene.txt} an, das auf dem Plus-Strang liegt.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   head -n 1 gene.txt
@@ -410,8 +417,8 @@ mit dem ersten Gen in \ty{gene.txt} an.
 Wir verwenden das Programm \ty{malGene.awk}, um solche Koordinaten als
 Rechtecke zu malen. Der Suffix \ty{awk} im Namen von \ty{malGene.awk}
 bedeutet, dass es ein Programm in der Programmiersprache Awk ist. Wir
-schauen uns den Code an, nur um festzustellen, dass er lesbarer Text
-ist---wie unsere kleineren Awk Programme bisher.
+schauen uns seinen Code an, nur um festzustellen, dass es lesbarer
+Text ist---wie unsere kleineren Awk Programme bisher.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   cat malGene.awk
@@ -449,7 +456,7 @@ Ausgangspunkt.
 \end{verbatim}
 #+end_export
 #+begin_export latex
-Diese Koordinate können wir mit \ty{plotLine} plotten, und erhalten
+Diese Koordinate können wir mit \ty{plotLine} plotten und erhalten
 Abbildung~\ref{fig:gene}A.
 \begin{figure}
   \begin{center}
@@ -468,12 +475,13 @@ Abbildung~\ref{fig:gene}A.
       plotLine
 #+end_src
 #+begin_export latex
-Abbildung~\ref{fig:gene}A ist noch nicht besonders schön. Um sie zu
-verbessern, lassen wir die Beschriftung der Y-Achse weg und verlängern
-die Y-Achse. Da Gene auf dem negativ-Strang nach unten gezeichnet
-werden, machen wir die Y-Achse zusätzlich nach oben und unten
-symmetrisch. Zuletzt beschriften wir die x-Achse und erhalten
-Abbildung~\ref{fig:gene}B.
+Abbildung~\ref{fig:gene}A ist etwas schwer zu verstehen: Die
+Beschriftung der y-Achse ist überflüssig, und die obere und unter
+Linie des Rechtecks ist verdeckt. Um sie zu verbessern, lassen wir die
+Beschriftung der y-Achse weg und verlängern die y-Achse. Da Gene auf
+dem negativ-Strang nach unten gezeichnet werden, spiegeln wir die
+y-Achse zusätzlich nach unten. Zuletzt beschriften wir die x-Achse und
+erhalten Abbildung~\ref{fig:gene}B.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   head -n 1 gene.txt |
@@ -488,9 +496,9 @@ Jetzt plotten wir alle Gene.
       plotLine -u y -Y "-5:5" -x "Position"
 #+end_src
 #+begin_export latex
-Die Position in einzelnen Basen zu messen führt zu schwer lesbaren
-Zahlen entlang der x-Achse.  Wir würden sie statt dessen gerne in
-Kilobasen messen. Das machen wir auch mit Awk.
+Die Position in einzelnen Basen entlang der x-Achse sind schwer zu
+lesen.  Wir würden sie statt in Basen gerne in Kilobasen messen. Das
+machen wir auch mit Awk.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   awk '{print $1/1000, $2/1000, $3}' gene.txt |
@@ -546,7 +554,11 @@ am Ende des Befehls öffnet ein unabhängiges Fenster für die Graphik.
 Eine Postscript Datei lässt sich auch gut in eine Textdatei
 einbinden. Wir verwenden dazu die Datei \ty{text.tex}. Der Suffix
 \ty{tex} zeit an, dass es sich dabei um eine Datei für das
-Setzprogramm \LaTeX{} handelt. Wir schauen uns die Datei an.
+Setzprogramm \LaTeX{} handelt. Zum Beispiel läd der Befehl
+\begin{verbatim}
+\includegraphics{genomPlot}
+\end{verbatim}
+unsere Graphik.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   cat text.tex

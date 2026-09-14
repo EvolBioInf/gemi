@@ -1,6 +1,6 @@
 #+begin_export latex
 Zu Beginn laden wir laden wir das Repo \ty{gemi} für \emph{Genomik zum
-Mitmachen}.
+Mitmachen} auf unseren Computer.
 #+end_export
 #+begin_src bash <<unix.sh>>=
   git clone https://github.com/evolbioinf/gemi
@@ -12,7 +12,7 @@ Wir wechseln in das neue Verzeichnis, \ty{gemi}.
   cd gemi
 #+end_src
 #+begin_export latex
-Wir listen die Dateien und Verzeihnise in \ty{gemi}.
+Wir listen die Dateien und Verzeichnisse in \ty{gemi}.
 #+end_export
 #+begin_src bash <<unix.sh>>=
   ls
