@@ -1,15 +1,16 @@
-# [gemi](): Genomik zum Mitmachen
+# [gemi](https://owncloud.gwdg.de/index.php/s/RGjWfcsF5GKCHtO): Genomik zum Mitmachen
 
 ## Autoren
 Beatriz Vieira Mourato und Bernhard Haubold
 
 ## Beschreibung
-*Genomik zum Mitmachen* ist ein einstündiges Tutoriat für
-interessierte Laien. Darin zeigen wir, wie man
-- mit der Unix Befehlszeile arbeitet
-- Gene darstellt
+*Genomik zum Mitmachen* ist ein einstündiges Tutoriat zum Einstieg in
+die Genomik. Darin zeigen wir, wie man mit der Unix Befehlszeile
+arbeitet und Gene darstellt.
 
-Gehe ins Verzeichnis `spielplatz`, um loszulegen.
+Öffne die
+[Dokumentation](https://owncloud.gwdg.de/index.php/s/RGjWfcsF5GKCHtO)
+und gehe ins Verzeichnis `spielplatz`, um loszulegen.
 
 ## Abhängigkeiten
 Wir brauchen
@@ -22,7 +23,7 @@ Wer auf einem Ubuntu-System arbeitet, kann das System einrichten mit
 dem Befehl
 
 ```
-bash scripts/setup.sh
+bash skripte/einrichten.sh
 ```
 
 Wir haben `setup.sh` und `gemi` getestet auf unserer "minimalen unix box", [`mix`](https://hub.docker.com/r/haubold/mix).
