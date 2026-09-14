@@ -1,8 +1,8 @@
 # Construct bin if necessary
 test -d ~/bin || mkdir ~/bin
-# Install gv, zip, and latex
+# Install curl, gv, latex, and zip
 sudo apt update
-sudo apt install -y gv texlive zip
+sudo apt install -y curl evince gv texlive texlive-lang-german texlive-font-utils zip
 # Install Neighbors
 git clone https://github.com/evolbioinf/neighbors
 cd neighbors
@@ -20,3 +20,4 @@ bash scripts/setup.sh
 make
 ln -s $(pwd)/bin/* ~/bin/
 cd ..
+source ~/.profile
