@@ -126,7 +126,7 @@ GCCGCCTTTATTATTTACAAAAGAAATGATCATATATTTAAATGATTATA...
 Wir zählen die 580,076 Nukleotide im Genom von
 \emph{M. genitalium}. Dabei sehen wir auch, dass etwa ein Drittel
 seiner Basen jeweils \ty{A} und \ty{T} sind. Das ist deutlich mehr als
-dads Viertel, das wir bei Gleichverteilung der vier Basen erwarten
+das Viertel, das wir bei Gleichverteilung der vier Basen erwarten
 würden. Wir sagen, das Genom von \emph{M. genitalium} ist A/T-reich.
 #+end_export
 #+begin_src bash <<gene.sh>>=
@@ -144,10 +144,12 @@ T       195711 0.337
 #+end_export
 #+begin_export latex
 \section{Die Annotationsdatei}
-Wir schauen uns den Kopf der Annotationsdatei an, aber diesmal lassen
-wir uns die ersten 20 Zeilen anzeigen (\ty{-n}) anstatt der ersten 10,
-die \ty{head} sonst anzeigt. Nach den Kommentar-Zeilen mit Hash-Tag
-sehen wir eine Tabelle.
+Wir schauen uns die Annotationsdatei an, um herauszubekommen, wo in
+ihr die Gene stehen. Dazu schauen uns zunächst wie beim Genom eben den
+Kopf der Datei an, aber diesmal lassen wir uns die ersten 20 Zeilen
+anzeigen (\ty{-n}) anstatt der ersten 10, die \ty{head} sonst
+anzeigt. Nach den Kommentar-Zeilen mit Hash-Tag sehen wir eine
+Tabelle.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   head -n 20 annotation.gff
@@ -163,7 +165,7 @@ ersten Position der Zeile.
 #+end_src
 #+begin_export latex
 Aber wir wollten doch die Kommentare \emph{weglassen}---jetzt haben
-wir nur die Kommentare! Kein Problem, wir könne mit \ty{-v} die Suche
+wir nur die Kommentare! Kein Problem, wir können mit \ty{-v} die Suche
 invertieren, also die Zeilen ausgeben, die nicht mit Hashtag anfangen.
 #+end_export
 #+begin_src bash <<gene.sh>>=
@@ -210,7 +212,7 @@ sehen \ty{region}, \ty{gene} und \ty{CDS}. CDS steht für \emph{coding
 sequence}, also eine Sequenz, die ein Protein codiert. Wir schneiden
 die Annotationen raus, sortieren sie (\ty{sort}), und zählen
 (\emph{count}, \ty{-c}) die verschiedenen (\ty{unique})
-Annotationen. Wir sehen, es gibt 546 Gene, von dnen 524 Proteine
+Annotationen. Wir sehen, es gibt 546 Gene, von denen 524 Proteine
 codieren. Es gibt auch 20 Pseudogene, das sing Gene, die nicht mehr
 funktionieren---kaputte Gene.
 #+end_export
@@ -324,10 +326,10 @@ Programmiersprache Awk. Awk geht zeilenweise vor, und in jeder Zeile
 der Eingabe heißt der erste Wert \verb+$1+, der zweite \verb+$2+, und
 so weiter. Bei uns ist der erste Wert die Anfangsposition des Gens,
 der zweite Wert die Endposition. So können wir die Länge jedes Gens
-ausrechnen und drucken.
+als \ty{len} ausrechnen und drucken.
 #+end_export
 #+begin_src bash <<gene.sh>>=
-  awk '{l=$2-$1+1; print l}' gene.txt |
+  awk '{len=$2-$1+1; print len}' gene.txt |
       head
 #+end_src
 #+begin_export latex
@@ -478,10 +480,11 @@ Abbildung~\ref{fig:gene}A.
 Abbildung~\ref{fig:gene}A ist etwas schwer zu verstehen: Die
 Beschriftung der y-Achse ist überflüssig, und die obere und unter
 Linie des Rechtecks ist verdeckt. Um sie zu verbessern, lassen wir die
-Beschriftung der y-Achse weg und verlängern die y-Achse. Da Gene auf
-dem negativ-Strang nach unten gezeichnet werden, spiegeln wir die
-y-Achse zusätzlich nach unten. Zuletzt beschriften wir die x-Achse und
-erhalten Abbildung~\ref{fig:gene}B.
+Beschriftung der y-Achse (\ty{-u}) weg und verlängern die y-Achse
+(\ty{-Y}). Da Gene auf dem negativ-Strang nach unten gezeichnet
+werden, spiegeln wir die y-Achse zusätzlich nach unten. Zuletzt
+beschriften wir die x-Achse (\ty{-x}) und erhalten
+Abbildung~\ref{fig:gene}B.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   head -n 1 gene.txt |
@@ -493,7 +496,7 @@ Jetzt plotten wir alle Gene.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   awk -f malGene.awk gene.txt |
-      plotLine -u y -Y "-5:5" -x "Position"
+      plotLine -u y -Y "-5:5" -x "Position (bp)"
 #+end_src
 #+begin_export latex
 Die Position in einzelnen Basen entlang der x-Achse sind schwer zu
@@ -543,22 +546,10 @@ Datei im ``encapsulated Postscript'' Format ist.
       plotLine -u y -Y "-5:5" -x "Position (kb)" -p genomPlot.eps
 #+end_src
 #+begin_export latex
-Wir können unsere neue Postscript Datei mit dem Programm \ty{gv} für
-\emph{ghost viewer} anschauen. Das \emph{kaufmännische und}, \verb+&+,
-am Ende des Befehls öffnet ein unabhängiges Fenster für die Graphik.
-#+end_export
-#+begin_src bash <<gene.sh>>=
-  gv genomPlot.eps &
-#+end_src
-#+begin_export latex
 Eine Postscript Datei lässt sich auch gut in eine Textdatei
 einbinden. Wir verwenden dazu die Datei \ty{text.tex}. Der Suffix
 \ty{tex} zeit an, dass es sich dabei um eine Datei für das
-Setzprogramm \LaTeX{} handelt. Zum Beispiel läd der Befehl
-\begin{verbatim}
-\includegraphics{genomPlot}
-\end{verbatim}
-unsere Graphik.
+Setzprogramm \LaTeX{} handelt. Wir schauen sie uns an.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   cat text.tex
@@ -580,6 +571,14 @@ unsere Graphik.
 
 \end{document}
 \end{verbatim}
+
+In der \LaTeX{} Datei fallen besonders die mit Rückstrichen markierten
+Wörter auf. Das sind \LaTeX{} Befehle. Zum Beispiel läd der Befehl
+\begin{verbatim}
+\includegraphics{genomPlot}
+\end{verbatim}
+unsere Graphik.
+
 Wir setzen die Datei als PDF.
 #+end_export
 #+begin_src bash <<gene.sh>>=
@@ -622,8 +621,12 @@ umwandeln?
   wir im Text auf sie mit \verb+\ref{b}+ verweisen. Kannst du auf
   deine beiden Abbildungen im Text verweisen?
 \end{enumerate}
-Wer sich weiter für \LaTeX{} interessiert, sollte das Buch seines
-Autors Leslie Lamport lesen~\cite{lam94:lat}.
+Wer sich weiter für \LaTeX{} interessiert und Bücher mag, kann das
+Buch seines Autors Leslie Lamport lesen~\cite{lam94:lat}. Online
+empfehlen wir das Tutorat von Overleaf.
+\begin{verbatim}
+https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes
+\end{verbatim}
 
 \subsection*{Genomik}
 Wer Lust auf Genomik auf der Befehlszeile bekommen hat, der kann im

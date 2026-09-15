@@ -1,5 +1,5 @@
 #+begin_export latex
-Zu Beginn laden wir laden wir das Repo \ty{gemi} für \emph{Genomik zum
+Zu Beginn laden wir das Repo \ty{gemi} für \emph{Genomik zum
 Mitmachen} auf unseren Computer.
 #+end_export
 #+begin_src bash <<unix.sh>>=
