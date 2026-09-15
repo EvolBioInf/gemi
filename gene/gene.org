@@ -386,14 +386,14 @@ stdin  989.15 644071 802.54 566
 #+end_export
 #+begin_export latex
 Wir können auch die Verteilung der Genlängen in Basenpaaren
-(\emph{base pairs}, bp) als Histogramm in Abbildung~\ref{fig:hist}
+(\emph{base pairs}, bp) als Histogramm in Abbildung~\ref{fig:his}
 plotten. Dort sehen wir, dass die Verteilung der Genlängen durch
 extrem lange Gene geprägt ist.
 \begin{figure}
   \begin{center}
     \includegraphics{../gene/hist}
   \end{center}
-  \caption{Die Verteilung von Genlängen im Genom von \emph{M. genitalium}.}\label{fig:hist}
+  \caption{Die Verteilung von Genlängen im Genom von \emph{M. genitalium}.}\label{fig:his}
 \end{figure}
 #+end_export
 #+begin_src bash <<gene.sh>>=
@@ -592,7 +592,41 @@ Wir schauen das neue PDF an.
   evince text.pdf &
 #+end_src
 #+begin_export latex
-Wer mag, kann weiter mit \ty{text.tex} spielen, den Text verändern, neu
-setzen, und so weiter. \LaTeX{} ist von seinem Erfinder Leslie Lamport
-schön beschrieben~\cite{lam94:lat}.
+\section{Wie geht es weiter?}
+\subsection*{\LaTeX{}}
+Wer mag, kann weiter mit \ty{text.tex} spielen und zum Beispiel
+Folgendes probieren:
+\begin{enumerate}
+  \item Das Histogramm in Abbildung~\ref{fig:his} in \ty{text.tex}
+    einbinden.
+  \item Kommentare fangen mit \verb+%+ an. Was passiert, wenn du die
+    Zeile
+\begin{verbatim}
+\usepackage[german]{babel}
+\end{verbatim}
+auskommentierst?
+\item Abbildungen haben die Struktur
+\begin{verbatim}
+\begin{figure}
+   \begin{center}
+      \includegraphics{meineGraphik}
+   \end{center}
+   \caption{Dies ist meine Lieblingsgraphik.}
+\end{figure}
+\end{verbatim}
+Kannst du deine beiden Graphiken in \ty{text.tex} in Abbildungen
+umwandeln?
+\item Wenn wir im Text auf eine Abbildung verweisen wollen, müssen wir
+  die \ty{figure} mit \verb+\label{b}+ beschriften, wobei \ty{b} eine
+  beliebige Beschriftung ist. Wenn die Beschriftung gestzt ist, können
+  wir im Text auf sie mit \verb+\ref{b}+ verweisen. Kannst du auf
+  deine beiden Abbildungen im Text verweisen?
+\end{enumerate}
+Wer sich weiter für \LaTeX{} interessiert, sollte das Buch seines
+Autors Leslie Lamport lesen~\cite{lam94:lat}.
+
+\subsection*{Genomik}
+Wer Lust auf Genomik auf der Befehlszeile bekommen hat, der kann im
+Buch \emph{Bioinformatics for Evolutionary Biologists}
+weitermachen~\cite{hau23:bio}.
 #+end_export
