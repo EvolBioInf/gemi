@@ -18,7 +18,6 @@ gene/annotation.gff
 gene/gene.txt
 gene/genom.fna
 gene/genomPlot-eps-converted-to.pdf
-gene/genomPlot.eps
 gene/malGene.awk
 gene/md5sum.txt
 gene/ncbi_dataset*
