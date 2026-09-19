@@ -74,10 +74,10 @@ die Möglichkeiten angezeigt.
 #+begin_export latex
 Um uns die Arbeit zu erleichtern, kopieren wir die beiden Dateien zu
 Dateien mit einfacheren Namen mit dem Befehl \ty{cp} für
-\emph{copy}. Zuerst das Genom zu \ty{genom.fna}. Das Anhängsel
-\ty{fna} bedeutet Nukleotide im FASTA Format. Das FASTA Format ist ein
-weitverbreitetes Format für Sequenzen. Wir werden es gleich noch
-sehen.
+\emph{copy}. Er hat die Form \ty{cp von zu}. Zuerst kopieren wir das
+Genom zu \ty{genom.fna}. Das Anhängsel \ty{fna} bedeutet Nukleotide im
+FASTA Format. Das FASTA Format ist ein weitverbreitetes Format für
+Sequenzen. Wir werden es gleich noch sehen.
 #+end_export
 #+begin_src bash <<gene.sh>>=
   cp ncbi_dataset/data/GCF_000027325.1/G*.fna genom.fna
@@ -111,7 +111,7 @@ TAAGTTATTATTTAGTTAATACTTTTAACAATATTATTAAGGTATTTAAA...
 \end{verbatim}
 #+end_export
 #+begin_export latex
-Wie den Kopf der Datei, können wir uns auch ihr anderes Ende, den
+Wie den Kopf der Datei, können wir uns auch ihr Ende, den
 Schwanz, ansehen.
 #+end_export
 #+begin_src bash <<gene.sh>>=
@@ -213,7 +213,7 @@ sequence}, also eine Sequenz, die ein Protein codiert. Wir schneiden
 die Annotationen raus, sortieren sie (\ty{sort}), und zählen
 (\emph{count}, \ty{-c}) die verschiedenen (\ty{unique})
 Annotationen. Wir sehen, es gibt 546 Gene, von denen 524 Proteine
-codieren. Es gibt auch 20 Pseudogene, das sing Gene, die nicht mehr
+codieren. Es gibt auch 20 Pseudogene, das sind Gene, die nicht mehr
 funktionieren---kaputte Gene.
 #+end_export
 #+begin_src bash <<gene.sh>>=
@@ -617,7 +617,7 @@ Kannst du deine beiden Graphiken in \ty{text.tex} in Abbildungen
 umwandeln?
 \item Wenn wir im Text auf eine Abbildung verweisen wollen, müssen wir
   die \ty{figure} mit \verb+\label{b}+ beschriften, wobei \ty{b} eine
-  beliebige Beschriftung ist. Wenn die Beschriftung gestzt ist, können
+  beliebige Beschriftung ist. Wenn die Beschriftung gesetzt ist, können
   wir im Text auf sie mit \verb+\ref{b}+ verweisen. Kannst du auf
   deine beiden Abbildungen im Text verweisen?
 \end{enumerate}
